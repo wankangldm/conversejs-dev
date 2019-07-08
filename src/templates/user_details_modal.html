@@ -1,0 +1,80 @@
+<div class="modal" id="user-details-modal" tabindex="-1" role="dialog" aria-labelledby="user-details-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="user-details-modal-label">{{{o.display_name}}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{{o.__('Close')}}}"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                {[ if (o.image) { ]}
+                <img alt="{{{o.__('The User\'s Profile Image')}}}"
+                    class="img-thumbnail avatar align-self-center mb-3"
+                    height="100" width="100" src="data:{{{o.image_type}}};base64,{{{o.image}}}"/>
+                {[ } ]}
+                {[ if (o.fullname) { ]}
+                <p><label>{{{o.__('显示名称:')}}}</label> {{{o.fullname}}}</p>
+                {[ } ]}
+                <!--<p><label>{{{o.__('XMPP Address:')}}}</label> <a href="xmpp:{{{o.jid}}}">{{{o.jid}}}</a></p>-->
+                {[ if (o.orgname) { ]}
+                <p><label>{{{o.__('公司设置:')}}}</label> {{{o.orgname}}}</p>
+                {[ } ]}
+                {[ if (o.orgunit) { ]}
+                <p><label>{{{o.__('部门设置:')}}}</label> {{{o.orgunit}}}</p>
+                {[ } ]}
+                {[ if (o.work_number) { ]}
+                <p><label>{{{o.__('办公电话:')}}}</label> {{{o.work_number}}}</p>
+                {[ } ]}
+                {[ if (o.home_number) { ]}
+                <p><label>{{{o.__('移动电话:')}}}</label> {{{o.home_number}}}</p>
+                {[ } ]}
+                {[ if (o.address) { ]}
+                <p><label>{{{o.__('办公地址:')}}}</label> {{{o.address}}}</p>
+                {[ } ]}
+                {[ if (o.email) { ]}
+                <p><label>{{{o.__('Email:')}}}</label> <a href="mailto:{{{o.email}}}">{{{o.email}}}</a></p>
+                {[ } ]}
+                {[ if (o.remark) { ]}
+                <p><label>{{{o.__('备注信息:')}}}</label> {{{o.remark}}}</p>
+                {[ } ]}
+
+                {[ if (o._converse.pluggable.plugins['converse-omemo'].enabled(o._converse)) { ]}
+                    <hr/>
+                    <ul class="list-group fingerprints">
+                        <li class="list-group-item active">{{{o.__('OMEMO Fingerprints')}}}</li>
+                        {[ if (!o.view.devicelist.devices) { ]}
+                            <li class="list-group-item"><span class="spinner fa fa-spinner centered"/></li>
+                        {[ } ]}
+                        {[ if (o.view.devicelist.devices) { ]}
+                            {[ o.view.devicelist.devices.each(function (device) { ]}
+                                {[ if (device.get('bundle') && device.get('bundle').fingerprint) { ]}
+                                <li class="list-group-item">
+                                    <form class="fingerprint-trust">
+                                    <div class="btn-group btn-group-toggle">
+                                        <label class="btn btn--small {[ if (device.get('trusted') !== -1) { ]} btn-primary active {[ } else { ]}  btn-secondary {[ } ]}">
+                                            <input type="radio" name="{{{device.get('id')}}}" value="1"
+                                                {[ if (device.get('trusted') !== -1) { ]} checked="checked" {[ } ]}/>{{{o.__('Trusted')}}}
+                                        </label>
+                                        <label class="btn btn--small {[ if (device.get('trusted') === -1) { ]} btn-primary active {[ } else { ]} btn-secondary {[ } ]}">
+                                            <input type="radio" name="{{{device.get('id')}}}" value="-1"
+                                                {[ if (device.get('trusted') === -1) { ]} checked="checked" {[ } ]}/>{{{o.__('Untrusted')}}}
+                                        </label>
+                                    </div>
+                                    <span class="fingerprint">{{{o.utils.formatFingerprint(device.get('bundle').fingerprint)}}}</span>
+                                    </form>
+                                </li>
+                                {[ } ]}
+                            {[ }); ]}
+                        {[ } ]}
+                    </ul>
+                {[ } ]}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">{{{o.__('关闭')}}}</button>
+                <button type="button" class="btn btn-info refresh-contact"><i class="fa fa-refresh"> </i>{{{o.__('刷新')}}}</button>
+                {[ if (o.allow_contact_removal && o.is_roster_contact) { ]}
+                    <button type="button" class="btn btn-danger remove-contact"><i class="far fa-trash-alt"> </i>{{{o.__('删除此联系人')}}}</button>
+                {[ } ]}
+            </div>
+        </div>
+    </div>
+</div>
